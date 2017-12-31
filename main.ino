@@ -11,11 +11,11 @@ void setup() {
   connectToWifi();
 
   server.on("/", [](){
+    Serial.readString(); // Discard any buffer
     Serial.println("read");
     String output = Serial.readString();
     server.send(200, "text/plain", output);
   });
-
 
   server.on("/select", HTTP_POST, [](){
     String portString = server.arg("port");
@@ -25,14 +25,11 @@ void setup() {
       return;
     }
     Serial.println("");
-    Serial.println("");
-    Serial.println("");
-    delay(1000);
+    Serial.readString();
     String command = String("sw i0" + portString);
 
     Serial.println(command);
-    delay(500);
-    server.send(200, "text/plain", "sending command " + command);
+    server.send(200, "text/plain", Serial.readString());
   });
 
   server.begin();
@@ -50,5 +47,8 @@ void connectToWifi() {
 }
 
 void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    connectToWifi();
+  }
   server.handleClient();
 }

@@ -11,6 +11,47 @@ The latter will likely be done begrudingly via Homebridge and 8 switch-type acce
 * Copy `wifi.example.h` to `wifi.h`
 * Fill in the values to connect to your wifi network
 
+## Usage
+
+### `GET /`
+
+Parameters: none
+
+Response: `text/plain`
+
+Example:
+
+`curl 192.168.1.100`
+
+```
+read Command OK
+Input: port4
+Output: ON
+Mode: Next
+Goto: OFF
+F/W: V1.0.067
+```
+
+Emits the raw HDMI switch output from a `read` command.
+
+### `POST /select`
+
+Parameters:
+
+* `port`: int (1-8)
+
+Response: `text/plain`
+
+Example:
+
+`curl -d port=2 192.168.1.100/select`
+
+```
+sw i02 Command OK
+```
+
+Emits the raw switch output from a `sw i0X` command.
+
 ## Wiring
 
 This was built and tested using an ESP-12e dev board and a [MAX3232 UART-to-RS323 adapter](https://www.amazon.com/gp/product/B00OPU2QJ4).
@@ -37,7 +78,9 @@ No idea if that's normal or something specific to serial output, but disconnecti
 Pressing the flash button before/during programming was not necessary with the wiring disconnected, and only worked about 2% of the time with it connected.
 Follow [this guide](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout/using-arduino-ide) to set up Arduino IDE to speak to the ESP8266 boards (but select NodeMCU instead of the Adafruit board).
 
-This is probably not very stable - likely requires a physical reset if the wifi disconnects.
+To find the device's IP, the easiest approach is to probably just check your router's DHCP leases.
+It should print to the serial console as well.
+
 There is a lot of room for improvement, which is welcome.
 
 There is ABSOLUTELY NO SECURITY here - any plaintext HTTP client that can talk to this can change your inputs or read the current settings.
