@@ -1,5 +1,6 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 #include "wifi.h"
 
 ESP8266WebServer server(80);
@@ -44,6 +45,11 @@ void connectToWifi() {
   }
   Serial.print("WiFi connected: ");
   Serial.println(WiFi.localIP());
+
+  // Make the device discoverable at `ghsw8181.local`
+  if (!MDNS.begin("ghsw8181")) {
+    Serial.println("mDNS responder setup failed");
+  }
 }
 
 void loop() {

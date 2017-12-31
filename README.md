@@ -21,7 +21,7 @@ Response: `text/plain`
 
 Example:
 
-`curl 192.168.1.100`
+`curl ghsw8181.local`
 
 ```
 read Command OK
@@ -44,7 +44,7 @@ Response: `text/plain`
 
 Example:
 
-`curl -d port=2 192.168.1.100/select`
+`curl -d port=2 ghsw8181.local/select`
 
 ```
 sw i02 Command OK
@@ -78,13 +78,17 @@ No idea if that's normal or something specific to serial output, but disconnecti
 Pressing the flash button before/during programming was not necessary with the wiring disconnected, and only worked about 2% of the time with it connected.
 Follow [this guide](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout/using-arduino-ide) to set up Arduino IDE to speak to the ESP8266 boards (but select NodeMCU instead of the Adafruit board).
 
+
+Upon setup, it will attempt to broadcast itself at `ghsw8181.local`.
+Depending on your network and DNS configuration, this may not resolve.
 To find the device's IP, the easiest approach is to probably just check your router's DHCP leases.
-It should print to the serial console as well.
+It should print to the serial console as well, but that will be inaccessible when connected to the switch (so make note of it when programming via the Arduino IDE).
 
 There is a lot of room for improvement, which is welcome.
 
 There is ABSOLUTELY NO SECURITY here - any plaintext HTTP client that can talk to this can change your inputs or read the current settings.
 Only basic validation to ensure you can't run arbitrary serial commands exists.
+So generally speaking, make sure this isn't exposed to the internet directly unless you want strangers changing your HDMI switch's input.
 
 ## License
 MIT
