@@ -1,5 +1,5 @@
 # ESP8266-GHSW8181
-Control an IOGEAR GHSW8148/GHSW8181 over wifi with an ESP8266
+Control an IOGEAR GHSW8141/GHSW8181 over wifi with an ESP8266
 
 ## Goals
 
