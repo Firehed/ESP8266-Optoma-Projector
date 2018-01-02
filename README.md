@@ -54,7 +54,7 @@ Emits the raw switch output from a `sw i0X` command.
 
 ## Wiring
 
-This was built and tested using an ESP-12e dev board and a [MAX3232 UART-to-RS323 adapter](https://www.amazon.com/gp/product/B00OPU2QJ4).
+This was built and tested using an ESP-12e dev board and a [MAX3232 UART-to-RS232 adapter](https://www.amazon.com/gp/product/B00OPU2QJ4).
 This adapter (or an equivalent) is NOT OPTIONAL, much to my dismay.
 Connect as follows:
 
