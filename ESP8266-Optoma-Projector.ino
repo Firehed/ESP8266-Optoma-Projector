@@ -42,6 +42,7 @@ void setup() {
 }
 
 void connectToWifi() {
+  WiFi.hostname(deviceName);
   WiFi.mode(WIFI_STA); // Client only
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -52,7 +53,7 @@ void connectToWifi() {
   Serial.println(WiFi.localIP());
 
   // Make the device discoverable at `optoma-projector.local`
-  if (!MDNS.begin("optoma-projector")) {
+  if (!MDNS.begin(deviceName)) {
     Serial.println("mDNS responder setup failed");
   }
 }
