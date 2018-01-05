@@ -1,10 +1,9 @@
-# ESP8266-GHSW8181
-Control an IOGEAR GHSW8141/GHSW8181 over wifi with an ESP8266
+# ESP8266-Optoma-Projector
+Control an Optoma projector over wifi with an ESP8266
 
 ## Goals
 
-Expose basic RS-232 control commands for the above HDMI switches over HTTP, with the intent to finagle this into a Homekit device.
-The latter will likely be done begrudingly via Homebridge and 8 switch-type accessories (probably lumped into a Platform).
+Expose basic RS-232 control commands for the projector over HTTP.
 
 ## Configuration
 
@@ -21,36 +20,38 @@ Response: `text/plain`
 
 Example:
 
-`curl ghsw8181.local`
+`curl optoma-projector.local`
 
 ```
-read Command OK
-Input: port4
-Output: ON
-Mode: Next
-Goto: OFF
-F/W: V1.0.067
+OKabbbbccdddde
 ```
 
-Emits the raw HDMI switch output from a `read` command.
+Emits the raw output from the "information" command
 
-### `POST /select`
+Per the manual:
+a: 0/1 = off/on
+bbbb: lamp hours
+cc: 00-04 = Input None/HDMI/VGA/S-Video/Video
+dddd: firmware version
+e: 0-8 = Display mode None/Presentation/Bright/Movie/sRGB/User1/User2/Blackboard/Classroom
+
+### `POST /power`
 
 Parameters:
 
-* `port`: int (1-8)
+* `state`: string "on" or "off"
 
 Response: `text/plain`
 
 Example:
 
-`curl -d port=2 ghsw8181.local/select`
+`curl -d state=on optoma-projector.local`
 
 ```
-sw i02 Command OK
+OK
 ```
 
-Emits the raw switch output from a `sw i0X` command.
+Emits the raw switch output from the information command.
 
 ## Wiring
 
@@ -79,7 +80,7 @@ Pressing the flash button before/during programming was not necessary with the w
 Follow [this guide](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout/using-arduino-ide) to set up Arduino IDE to speak to the ESP8266 boards (but select NodeMCU instead of the Adafruit board).
 
 
-Upon setup, it will attempt to broadcast itself at `ghsw8181.local`.
+Upon setup, it will attempt to broadcast itself at `optoma-projector.local`.
 Depending on your network and DNS configuration, this may not resolve.
 To find the device's IP, the easiest approach is to probably just check your router's DHCP leases.
 It should print to the serial console as well, but that will be inaccessible when connected to the switch (so make note of it when programming via the Arduino IDE).
@@ -88,7 +89,7 @@ There is a lot of room for improvement, which is welcome.
 
 There is ABSOLUTELY NO SECURITY here - any plaintext HTTP client that can talk to this can change your inputs or read the current settings.
 Only basic validation to ensure you can't run arbitrary serial commands exists.
-So generally speaking, make sure this isn't exposed to the internet directly unless you want strangers changing your HDMI switch's input.
+So generally speaking, make sure this isn't exposed to the internet directly unless you want strangers able to turn your projector on or off!
 
 ## License
 MIT

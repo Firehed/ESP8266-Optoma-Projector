@@ -6,28 +6,33 @@
 ESP8266WebServer server(80);
 
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600);
   delay(100);
 
   connectToWifi();
 
   server.on("/", [](){
     Serial.readString(); // Discard any buffer
-    Serial.println("read");
+    Serial.println("~00150 1");
+    // This will output "OKabbbbccdddde"; a=power, bbbb=lamp hour, cc=source, dddd=firmware
     String output = Serial.readString();
     server.send(200, "text/plain", output);
   });
 
-  server.on("/select", HTTP_POST, [](){
-    String portString = server.arg("port");
-    int requestedPort = portString.toInt();
-    if (requestedPort < 1 || requestedPort > 8) {
-      server.send(400, "text/plain", "invalid port");
+  server.on("/power", HTTP_POST, [](){
+    String state = server.arg("state");
+    String mode;
+    if (state == "on") {
+        mode = "1";
+    } else if (state == "off") {
+        mode = "0";
+    } else {
+      server.send(400, "text/plain", "invalid state");
       return;
     }
     Serial.println("");
     Serial.readString();
-    String command = String("sw i0" + portString);
+    String command = String("~0000 " + mode);
 
     Serial.println(command);
     server.send(200, "text/plain", Serial.readString());
@@ -46,8 +51,8 @@ void connectToWifi() {
   Serial.print("WiFi connected: ");
   Serial.println(WiFi.localIP());
 
-  // Make the device discoverable at `ghsw8181.local`
-  if (!MDNS.begin("ghsw8181")) {
+  // Make the device discoverable at `optoma-projector.local`
+  if (!MDNS.begin("optoma-projector")) {
     Serial.println("mDNS responder setup failed");
   }
 }
