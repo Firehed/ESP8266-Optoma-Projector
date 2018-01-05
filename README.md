@@ -29,12 +29,29 @@ OKabbbbccdddde
 Emits the raw output from the "information" command
 
 Per the manual:
-a: 0/1 = off/on
+```
+a: power status
+  0 = off
+  1 = on
 bbbb: lamp hours
-cc: 00-04 = Input None/HDMI/VGA/S-Video/Video
+cc: input
+  00 = None
+  01 = HDMI
+  02 = VGA
+  03 = S-Video
+  04 = Video
 dddd: firmware version
-e: 0-8 = Display mode None/Presentation/Bright/Movie/sRGB/User1/User2/Blackboard/Classroom
-
+e: Display mode
+  00 = None
+  01 = Presentation
+  02 = Bright
+  03 = Movie
+  04 = sRGB
+  05 = User1
+  06 = User2
+  07 = Blackboard
+  08 = Classroom
+```
 ### `POST /power`
 
 Parameters:
