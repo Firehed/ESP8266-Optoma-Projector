@@ -23,34 +23,16 @@ Example:
 `curl optoma-projector.local`
 
 ```
-OKabbbbccdddde
+OKa
 ```
 
-Emits the raw output from the "information" command
+Emits the raw output from the "power state" command
 
 Per the manual:
 ```
-a: power status
+a: power state
   0 = off
   1 = on
-bbbb: lamp hours
-cc: input
-  00 = None
-  01 = HDMI
-  02 = VGA
-  03 = S-Video
-  04 = Video
-dddd: firmware version
-e: Display mode
-  00 = None
-  01 = Presentation
-  02 = Bright
-  03 = Movie
-  04 = sRGB
-  05 = User1
-  06 = User2
-  07 = Blackboard
-  08 = Classroom
 ```
 ### `POST /power`
 
@@ -65,10 +47,11 @@ Example:
 `curl -d state=on optoma-projector.local`
 
 ```
-OK
+P
 ```
 
-Emits the raw switch output from the information command.
+Emits the raw output from the power on/off command.
+`P` is "pass" and `F` is "fail".
 
 ## Wiring
 
@@ -86,9 +69,6 @@ Connect as follows:
 Note that OUT refers to the arrow pointing *away* from the chip, and IN refers to the arrow pointing *towards* it.
 The four bottom-most pins on the right side (top view) on the dev board should be the ones you want.
 
-When using a USB-to-serial adapter to debug this, I needed to use a null modem cable (technically, some very shaky jumper wires).
-This was not required when actually plugged into the HDMI switch.
-
 ## Notes
 In the Arduino IDE, I have selected a NodeMCU ESP-12e board, 115200 baud connection.
 It would always error out during uploading unless the wiring was disconnected.
@@ -104,9 +84,9 @@ It should print to the serial console as well, but that will be inaccessible whe
 
 There is a lot of room for improvement, which is welcome.
 
-There is ABSOLUTELY NO SECURITY here - any plaintext HTTP client that can talk to this can change your inputs or read the current settings.
-Only basic validation to ensure you can't run arbitrary serial commands exists.
-So generally speaking, make sure this isn't exposed to the internet directly unless you want strangers able to turn your projector on or off!
+There is ABSOLUTELY NO SECURITY here - this is a plaintext HTTP server with no authentication.
+As such, it is very strongly advised that you do not expose it beyond your local network.
+Typically this is automatic in a home network with most routers, but it is worth confirming (especially if your network supports IPv6).
 
 ## License
 MIT

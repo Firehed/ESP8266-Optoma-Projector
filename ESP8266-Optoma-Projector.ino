@@ -12,11 +12,14 @@ void setup() {
   connectToWifi();
 
   server.on("/", [](){
+    Serial.println("");
     Serial.readString(); // Discard any buffer
-    Serial.println("~00150 1");
-    // This will output "OKabbbbccdddde"; a=power, bbbb=lamp hour, cc=source, dddd=firmware
-    String output = Serial.readString();
-    server.send(200, "text/plain", output);
+    String command = String("~00124 1");
+    Serial.println(command);
+
+    // This will output "OKa"; a=0/1 (off/on)
+
+    server.send(200, "text/plain",  Serial.readString());
   });
 
   server.on("/power", HTTP_POST, [](){
